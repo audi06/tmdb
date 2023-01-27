@@ -1,0 +1,52 @@
+<screen position="center,147" size="2400,1240" title="TMDB - The Movie Database" >
+	<widget name="searchinfo" position="27,40" size="1800,54" font="Regular; 43" foregroundColor="#00fff000" transparent="1" />
+	<widget name="fulldescription" position="27,120" size="1134,960" font="Regular; 38" transparent="1"/>
+	<widget name="cover" position="1934,267" size="427,640" alphatest="blend" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tmdb/pic/backdrop.jpg" position="0,0" size="2560,1440" zPosition="-6" scale="1" alphatest="blend" />
+	<widget name="backdrop" position="0,0" size="2400,1350" zPosition="-5" alphatest="blend"/>
+	<ePixmap gradient="#50000000,#50000000,horizontal" position="0,0" size="2560,1440" zPosition="-2" />
+
+	<widget name="rating" position="1174,374" size="200,36" zPosition="2" font="Regular;36" halign="center" foregroundColor="black" backgroundColor="#00ffba00" transparent="1"/>
+	<widget name="votes_brackets" position="1174,454" size="200,36" zPosition="2" font="Regular;36" halign="center" transparent="1"/>
+	<ePixmap position="1207,320" size="134,134" zPosition="0" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tmdb/pic/star.png" transparent="1" alphatest="blend"/>
+	<widget name="fsklogo" position="1434,320" size="134,134" zPosition="2" alphatest="blend"/>
+
+	<widget name="year_txt" position="1200,547" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="year" position="1374,547" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="country_txt" position="1200,587" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="country" position="1374,587" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="runtime_txt" position="1200,627" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="runtime" position="1374,627" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="votes_txt" position="1200,667" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="votes" position="1374,667" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="director_txt" position="1200,707" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="director" position="1374,707" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="author_txt" position="1200,747" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="author" position="1374,747" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="genre_txt" position="1200,787" size="134,40" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="genre" position="1374,787" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="studio_txt" position="1200,827" size="134,40" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+	<widget name="studio" position="1374,827" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
+
+	<ePixmap pixmap="Default-FHD/skin_default/buttons/red.svg" position="27,1120" size="400,94" />
+	<ePixmap pixmap="Default-FHD/skin_default/buttons/green.svg" position="427,1120" size="400,94" />
+	<ePixmap pixmap="Default-FHD/skin_default/buttons/yellow.svg" position="827,1120" size="400,94" />
+	<ePixmap pixmap="Default-FHD/skin_default/buttons/blue.svg" position="1227,1120" size="400,94" />
+
+	<widget font="Regular;40" halign="center" name="key_red"
+		position="27,1120" foregroundColor="white" backgroundColor="#9f1313" shadowColor="black"
+		shadowOffset="-2,-2" size="400,94" transparent="1" valign="center"
+		zPosition="1" />
+	<widget font="Regular;40" halign="center" name="key_green"
+		position="427,1120" foregroundColor="white" backgroundColor="#1f771f" shadowColor="black"
+		shadowOffset="-2,-2" size="400,94" transparent="1" valign="center"
+		zPosition="1" />
+	<widget font="Regular;40" halign="center" name="key_yellow"
+		position="827,1120" foregroundColor="white" backgroundColor="#a08500" shadowColor="black"
+		shadowOffset="-2,-2" size="400,94" transparent="1" valign="center"
+		zPosition="1" />
+	<widget font="Regular;40" halign="center" name="key_blue"
+		position="1227,1120" foregroundColor="white" backgroundColor="#18188b" shadowColor="black"
+		shadowOffset="-2,-2" size="400,94" transparent="1" valign="center"
+		zPosition="1" />
+</screen>
