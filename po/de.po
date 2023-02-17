@@ -13,8 +13,8 @@ msgstr ""
 "X-Generator: Poedit 3.1\n"
 "#-#-#-#-#  de.po (tmdb)  #-#-#-#-#\n"
 "Project-Id-Version: tmdb\n"
-"POT-Creation-Date: 2023-02-11 15:54+0100\n"
-"PO-Revision-Date: 2023-02-11 15:55+0100\n"
+"POT-Creation-Date: 2023-02-18 18:59+0100\n"
+"PO-Revision-Date: 2023-02-18 19:00+0100\n"
 "Last-Translator: dream-alpha\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.1\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -139,20 +139,17 @@ msgstr "Cover Auflösung:"
 msgid "Backdrop resolution:"
 msgstr "Backdrop Auflösung:"
 
-msgid "TMDB: Results for %s"
-msgstr "Ergebnisse für: %s"
+msgid "Use internal TMDB API key:"
+msgstr "Verwende internen TMDB API Key:"
 
-msgid "Show details"
-msgstr "Zeige Details"
+msgid "Overview"
+msgstr "Überblick"
 
 msgid "Exit"
 msgstr "Schließen"
 
-msgid "Details down"
-msgstr "Details runter"
-
-msgid "Details up"
-msgstr "Details hoch"
+msgid "Details"
+msgstr "Details"
 
 msgid "Edit search"
 msgstr "Bearbeite Suche"
@@ -160,20 +157,29 @@ msgstr "Bearbeite Suche"
 msgid "more ..."
 msgstr "mehr ..."
 
-msgid "Loading..."
-msgstr "Lade ..."
+msgid "Show details"
+msgstr "Zeige Details"
 
-msgid "Details"
-msgstr "Details"
+msgid "Details down"
+msgstr "Details runter"
 
-msgid "TMDB: No results for %s"
+msgid "Details up"
+msgstr "Details hoch"
+
+msgid "External TMDB API key is not available in:"
+msgstr "Gültiger externer TMDB API Key ist nicht verfügbar in:"
+
+msgid "Looking up: %s ..."
+msgstr "Lade: %s ..."
+
+msgid "No search string specified."
+msgstr "Suchtext fehlt."
+
+msgid "page"
+msgstr "Seite"
+
+msgid "No results for: %s"
 msgstr "Keine Ergebnisse für: %s"
-
-msgid "Try to find %s in tmdb ..."
-msgstr "Versuche %s in TMDB zu finden ..."
-
-msgid "Data lookup failed."
-msgstr "Datenabfrage ist fehlgeschlagen."
 
 msgid "Movie"
 msgstr "Film"
@@ -183,12 +189,6 @@ msgstr "Serie"
 
 msgid "Person"
 msgstr "Person"
-
-msgid "TMDB:"
-msgstr "TMDB:"
-
-msgid "page "
-msgstr "Seite "
 
 msgid "TMDB Infos ..."
 msgstr "TMDB Infos "
@@ -213,6 +213,9 @@ msgstr "Bestbewertete Filme"
 
 msgid "Search for Movie:"
 msgstr "Suche nach Film:"
+
+msgid "Movie Details"
+msgstr "Filmdetails"
 
 msgid "Genre:"
 msgstr "Genre:"
@@ -256,6 +259,18 @@ msgstr "Seite hoch"
 msgid "Page down"
 msgstr "Seite runter"
 
+msgid "Videos"
+msgstr "Trailer"
+
+msgid "Various"
+msgstr "Verschiedene"
+
+msgid "Episodes"
+msgstr "Episoden"
+
+msgid "Season"
+msgstr "Staffel"
+
 msgid "Save movie description"
 msgstr "Filmbeschreibung speichern"
 
@@ -281,7 +296,7 @@ msgid "Backdrop saved."
 msgstr "Backdrop gespeichert."
 
 msgid "No backdrop available"
-msgstr "Kein Hintergrundbild (backdrop) verfügbar"
+msgstr "Kein Backdrop verfügbar"
 
 msgid "Movie description saved."
 msgstr "Filmbeschreibung gespeichert."
@@ -295,14 +310,20 @@ msgstr "EIT Datei gelöscht."
 msgid "No EIT file available"
 msgstr "Keine EIT Datei verfügbar"
 
-msgid "Various"
-msgstr "Verschiedene"
+msgid "TMDB videos"
+msgstr "TMDB Trailer"
 
-msgid "Episodes"
-msgstr "Episoden"
+msgid "Please select a video"
+msgstr "Trailer Auswahl"
 
-msgid "Season"
-msgstr "Staffel"
+msgid "Person Details"
+msgstr "Personendetails"
+
+msgid "Popularity"
+msgstr "Popularität"
+
+msgid "Known for:"
+msgstr "Bekannt aus:"
 
 msgid "female"
 msgstr "weiblich"
@@ -315,9 +336,3 @@ msgstr "divers"
 
 msgid "None"
 msgstr "N/A"
-
-msgid "Popularity"
-msgstr "Popularität"
-
-msgid "Known for:"
-msgstr "Bekannt aus:"

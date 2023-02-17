@@ -13,8 +13,8 @@ msgstr ""
 "X-Generator: Poedit 3.1\n"
 "#-#-#-#-#  de.po (tmdb)  #-#-#-#-#\n"
 "Project-Id-Version: tmdb\n"
-"POT-Creation-Date: 2023-02-11 15:54+0100\n"
-"PO-Revision-Date: 2023-02-11 15:55+0100\n"
+"POT-Creation-Date: 2023-02-18 18:59+0100\n"
+"PO-Revision-Date: 2023-02-18 19:00+0100\n"
 "Last-Translator: dream-alpha\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.1\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -136,19 +136,16 @@ msgstr ""
 msgid "Backdrop resolution:"
 msgstr ""
 
-msgid "TMDB: Results for %s"
+msgid "Use internal TMDB API key:"
 msgstr ""
 
-msgid "Show details"
+msgid "Overview"
 msgstr ""
 
 msgid "Exit"
 msgstr ""
 
-msgid "Details down"
-msgstr ""
-
-msgid "Details up"
+msgid "Details"
 msgstr ""
 
 msgid "Edit search"
@@ -157,19 +154,28 @@ msgstr ""
 msgid "more ..."
 msgstr ""
 
-msgid "Loading..."
+msgid "Show details"
 msgstr ""
 
-msgid "Details"
+msgid "Details down"
 msgstr ""
 
-msgid "TMDB: No results for %s"
+msgid "Details up"
 msgstr ""
 
-msgid "Try to find %s in tmdb ..."
+msgid "External TMDB API key is not available in:"
 msgstr ""
 
-msgid "Data lookup failed."
+msgid "Looking up: %s ..."
+msgstr ""
+
+msgid "No search string specified."
+msgstr ""
+
+msgid "page"
+msgstr ""
+
+msgid "No results for: %s"
 msgstr ""
 
 msgid "Movie"
@@ -179,12 +185,6 @@ msgid "Series"
 msgstr ""
 
 msgid "Person"
-msgstr ""
-
-msgid "TMDB:"
-msgstr ""
-
-msgid "page "
 msgstr ""
 
 msgid "TMDB Infos ..."
@@ -209,6 +209,9 @@ msgid "Best rated movies"
 msgstr ""
 
 msgid "Search for Movie:"
+msgstr ""
+
+msgid "Movie Details"
 msgstr ""
 
 msgid "Genre:"
@@ -253,6 +256,18 @@ msgstr ""
 msgid "Page down"
 msgstr ""
 
+msgid "Videos"
+msgstr ""
+
+msgid "Various"
+msgstr ""
+
+msgid "Episodes"
+msgstr ""
+
+msgid "Season"
+msgstr ""
+
 msgid "Save movie description"
 msgstr ""
 
@@ -292,13 +307,19 @@ msgstr ""
 msgid "No EIT file available"
 msgstr ""
 
-msgid "Various"
+msgid "TMDB videos"
 msgstr ""
 
-msgid "Episodes"
+msgid "Please select a video"
 msgstr ""
 
-msgid "Season"
+msgid "Person Details"
+msgstr ""
+
+msgid "Popularity"
+msgstr ""
+
+msgid "Known for:"
 msgstr ""
 
 msgid "female"
@@ -311,10 +332,4 @@ msgid "divers"
 msgstr ""
 
 msgid "None"
-msgstr ""
-
-msgid "Popularity"
-msgstr ""
-
-msgid "Known for:"
 msgstr ""

@@ -21,7 +21,7 @@
 
 import random
 import requests
-from .Debug import logger
+# from .Debug import logger
 
 
 class WebRequests():
@@ -52,8 +52,10 @@ class WebRequests():
 		session.headers.update({"user-agent": self.getUserAgent()})
 		return session
 
-	def getContent(self, url):
-		logger.info("url: %s", url)
+	def getContent(self, url, params=None):
+		# logger.info("url: %s", url)
 		headers = {"user-agent": self.getUserAgent()}
-		r = requests.get(url, headers=headers, allow_redirects=True, verify=False)
+		if params is None:
+			params = {}
+		r = requests.get(url, headers=headers, params=params, allow_redirects=True, verify=False)
 		return r.content

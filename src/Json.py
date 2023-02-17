@@ -49,7 +49,7 @@ class Json():
 		if key in result:
 			logger.debug("key: %s", result[key])
 			for source in result[key]:
-				logger.debug("source: %s", source)
+				# logger.debug("source: %s", source)
 				text = checkText(source)
 				# logger.debug("checked text: %s", text)
 				text = six.ensure_str(text)

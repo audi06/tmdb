@@ -52,20 +52,29 @@ def getResolution():
 	return resolution
 
 
-def getSkinPath(file_name, size=0):
-	logger.debug("file_name: %s, size: %s", file_name, size)
+def getSkinPath(file_name):
+	logger.debug("file_name: %s", file_name)
 	resolution = getResolution()
-	skin_path = resolveFilename(SCOPE_CURRENT_SKIN, PLUGIN + "/skin/" + resolution + "/" + file_name)
-	# logger.debug("skin_path1: %s", skin_path)
-	if not os.path.exists(skin_path):
-		skin_path = resolveFilename(SCOPE_SKIN, "Default-FHD/" + PLUGIN + "/skin/" + resolution + "/" + file_name)
-		# logger.debug("skin_path2: %s", skin_path)
-		if not os.path.exists(skin_path):
-			skin_path = resolveFilename(SCOPE_PLUGINS, "Extensions/" + PLUGIN + "/skin/" + resolution + "/" + file_name)
-			# logger.debug("skin_path3: %s", skin_path)
-			if not os.path.exists(skin_path):
-				skin_path = resolveFilename(SCOPE_SKIN, resolution + "/" + file_name)
-				# logger.debug("skin_path4: %s", skin_path)
+	dirs = [
+		(SCOPE_CURRENT_SKIN, PLUGIN + "/skin/"),
+		(SCOPE_SKIN, "Default-FHD" + "/" + PLUGIN + "/skin/"),
+		(SCOPE_PLUGINS, "Extensions" + "/" + PLUGIN + "/" + "skin/"),
+		(SCOPE_SKIN, "")
+	]
+	logger.debug("dirs: %s", dirs)
+
+	found = False
+	for adir in dirs:
+		for _resolution in [resolution + "/", ""]:
+			skin_path = resolveFilename(adir[0], adir[1] + _resolution + file_name)
+			# logger.debug("checking: skin_path: %s", skin_path)
+			if os.path.exists(skin_path):
+				found = True
+				break
+		if found:
+			break
+	else:
+		skin_path = None
 	logger.debug("skin_path: %s", skin_path)
 	return skin_path
 

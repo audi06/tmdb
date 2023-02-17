@@ -3,13 +3,13 @@
 	<widget name="fulldescription" position="27,120" size="1134,960" font="Regular; 38" transparent="1"/>
 	<widget name="cover" position="1934,267" size="427,640" alphatest="blend" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tmdb/pic/backdrop.jpg" position="0,0" size="2560,1440" zPosition="-6" scale="1" alphatest="blend" />
-	<widget name="backdrop" position="0,0" size="2400,1350" zPosition="-5" alphatest="blend"/>
+	<widget name="backdrop" position="0,0" size="2560,1440" zPosition="-5" alphatest="blend"/>
 	<ePixmap gradient="#50000000,#50000000,horizontal" position="0,0" size="2560,1440" zPosition="-2" />
 
 	<widget name="rating" position="1174,374" size="200,36" zPosition="2" font="Regular;36" halign="center" foregroundColor="black" backgroundColor="#00ffba00" transparent="1"/>
 	<widget name="votes_brackets" position="1174,454" size="200,36" zPosition="2" font="Regular;36" halign="center" transparent="1"/>
-	<ePixmap position="1207,320" size="134,134" zPosition="0" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tmdb/pic/star.png" transparent="1" alphatest="blend"/>
-	<widget name="fsklogo" position="1434,320" size="134,134" zPosition="2" alphatest="blend"/>
+	<widget name="star" position="1207,320" size="134,134" zPosition="0" alphatest="blend"/>
+	<widget name="fsklogo" position="1434,340" size="134,134" zPosition="2" alphatest="blend"/>
 
 	<widget name="year_txt" position="1200,547" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>
 	<widget name="year" position="1374,547" size="534,40" zPosition="2" font="Regular;36" foregroundColor="#00ffffff" backgroundColor="#00303030" transparent="1"/>

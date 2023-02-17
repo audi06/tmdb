@@ -20,6 +20,7 @@
 
 
 import os
+from twisted.internet import reactor, threads
 from twisted.web.client import downloadPage
 from Tools.LoadPixmap import LoadPixmap
 from .Debug import logger
@@ -32,13 +33,13 @@ class Picture():
 
 	def showPicture(self, pixmap, atype, ident, url):
 		logger.info("atype: %s, ident: %s, url: %s", atype, ident, url)
-		path = temp_dir + atype + ident + ".jpg"
-		if url:
-			self.__downloadPicture(pixmap, url, path, self.__showPicture)
+		path = temp_dir + atype + str(ident) + ".jpg"
+		if url and not url.endswith("None") and not os.path.isfile(path):
+			threads.deferToThread(self.__downloadPicture, pixmap, url, path, self.__showPicture)
 		else:
-			self.__showPicture(None, pixmap, path)
+			self.__showPicture(pixmap, path)
 
-	def __showPicture(self, _, pixmap, path):
+	def __showPicture(self, pixmap, path):
 		logger.info("path: %s", path)
 		if pixmap and pixmap.instance:
 			if not path or (path and not os.path.isfile(path)):
@@ -49,16 +50,12 @@ class Picture():
 				pixmap.show()
 
 	def __downloadPicture(self, pixmap, url, path, callback):
-
 		def downloadError(error):
 			logger.debug("error: %s, url: %s", error, url)
+			reactor.callFromThread(callback, pixmap, path)  # pylint: disable=E1101
+
+		def downloadSuccess(*_args):
+			reactor.callFromThread(callback, pixmap, path)  # pylint: disable=E1101
 
 		logger.info("url: %s, path: %s", url, path)
-		if url[-4:] == "None":
-			logger.debug("No url found")
-			callback(None, pixmap, path)
-		else:
-			if not os.path.isfile(path):
-				downloadPage(url, path, timeout=5).addCallback(callback, pixmap, path).addErrback(downloadError)
-			else:
-				callback(None, pixmap, path)
+		downloadPage(url, path, timeout=5).addCallback(downloadSuccess).addErrback(downloadError)

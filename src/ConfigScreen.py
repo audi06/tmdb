@@ -55,7 +55,7 @@ class ConfigScreen(Screen, ConfigListScreen):
 		self.list.append(getConfigListEntry(_("Yellow key for TMDB infos in EPGs:"), config.plugins.tmdb.key_yellow))
 		self.list.append(getConfigListEntry(_("Cover resolution:"), config.plugins.tmdb.cover_size))
 		self.list.append(getConfigListEntry(_("Backdrop resolution:"), config.plugins.tmdb.backdrop_size))
-		self.list.append(getConfigListEntry("TMDB API key:", config.plugins.tmdb.api_key))
+		self.list.append(getConfigListEntry(_("Use internal TMDB API key:"), config.plugins.tmdb.internal_api_key))
 		self["config"].setList(self.list)
 
 	def changedEntry(self):

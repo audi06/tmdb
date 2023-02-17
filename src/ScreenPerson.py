@@ -18,6 +18,8 @@
 # For more information on the GNU General Public License see:
 # <http://www.gnu.org/licenses/>.
 
+
+from twisted.internet import reactor, threads
 from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -38,16 +40,18 @@ from .Json import Json
 class ScreenPerson(Picture, Json, Screen, HelpableScreen):
 	skin = readFile(getSkinPath("ScreenPerson.xml"))
 
-	def __init__(self, session, cover_ident, backdrop_ident):
+	def __init__(self, session, person, cover_ident, backdrop_ident):
 		logger.info("cover_ident: %s, backdrop_ident: %s", cover_ident, backdrop_ident)
 		Screen.__init__(self, session)
 		Picture.__init__(self)
+		self.title = "TMDB - The Movie Database - " + _("Person Details")
 		Json.__init__(self)
 		self.session = session
+		self.person = person
 		self.cover_ident = cover_ident
 		self.backdrop_ident = backdrop_ident
 
-		self['searchinfo'] = Label(_("Loading..."))
+		self['searchinfo'] = Label()
 		self['fulldescription'] = self.fulldescription = ScrollLabel("")
 		self['cover'] = Pixmap()
 		self['backdrop'] = Pixmap()
@@ -81,6 +85,25 @@ class ScreenPerson(Picture, Json, Screen, HelpableScreen):
 		self.getData()
 
 	def getData(self):
+		self["searchinfo"].setText(_("Looking up: %s ...") % self.person)
+		threads.deferToThread(self.getResult, self.gotData)
+
+	def gotData(self, result):
+		if not result:
+			self["searchinfo"].setText(_("No results for: %s") % self.person)
+		else:
+			self["searchinfo"].setText(result["name"])
+			fulldescription = result["birthday"] + ", " \
+				+ result["place_of_birth"] + ", " \
+				+ result["gender"] + "\n" \
+				+ result["also_known_as"] + "\n" \
+				+ _("Popularity") + ": " + result["popularity"] + "\n\n" \
+				+ result["biography"] + "\n\n" \
+				+ _("Known for:") + "\n" \
+				+ result["movies"]
+			self["fulldescription"].setText(fulldescription)
+
+	def getResult(self, callback):
 		lang = config.plugins.tmdb.lang.value
 		logger.debug("cover_ident: %s", self.cover_ident)
 		result = {}
@@ -90,69 +113,56 @@ class ScreenPerson(Picture, Json, Screen, HelpableScreen):
 			if not result["biography"]:
 				json_person = tmdb.People(self.cover_ident).info(language="en")
 				self.parseJsonSingle(result, json_person, "biography")
-			logger.debug("json_person: %s", json_person)
+			# logger.debug("json_person: %s", json_person)
 			json_person_movie = tmdb.People(self.cover_ident).movie_credits(language=lang)
-			logger.debug("json_person_movie: %s", json_person_movie)
+			# logger.debug("json_person_movie: %s", json_person_movie)
 			json_person_tv = tmdb.People(self.cover_ident).tv_credits(language=lang)
 			# logger.debug("json_person_tv: %s", json_person_tv)
 		except Exception as e:
 			logger.error("exception: %s", e)
-			self["searchinfo"].setText(_("Data lookup failed."))
-			return
-
-		keys = ["name", "birthday", "place_of_birth", "gender", "also_known_as", "popularity"]
-		self.parseJsonMultiple(result, json_person, keys)
-		logger.debug("result: %s", result)
-
-		self['searchinfo'].setText(result['name'])
-
-		gender = str(result["gender"])
-		if gender == "1":
-			gender = _("female")
-		elif gender == "2":
-			gender = _("male")
-		elif gender == "divers":
-			gender = _("divers")
+			result = {}
 		else:
-			gender = _("None")
-		result["gender"] = gender
-
-		self.parseJsonList(result, "also_known_as", ",")
-		result["popularity"] = "%.1f" % float(result["popularity"])
-
-		fulldescription = result["birthday"] + ", " \
-			+ result["place_of_birth"] + ", " \
-			+ result["gender"] + "\n" \
-			+ result["also_known_as"] + "\n" \
-			+ _("Popularity") + ": " + result["popularity"] + "\n\n" \
-			+ result["biography"] + "\n\n"
-
-		logger.debug("fulldescription: %s", fulldescription)
-
-		data_movies = []
-		result = {}
-		for source in [
-			(json_person_movie, ["release_date", "title", "character"], "movie"),
-			(json_person_tv, ["first_air_date", "name", "character"], "tv")]:
-			self.parseJsonSingle(result, source[0], "cast")
+			keys = ["name", "birthday", "place_of_birth", "gender", "also_known_as", "popularity"]
+			self.parseJsonMultiple(result, json_person, keys)
 			logger.debug("result: %s", result)
-			for cast in result["cast"]:
-				logger.debug("cast: %s", cast)
-				movie = {}
-				self.parseJsonMultiple(movie, cast, source[1])
-				logger.debug("movie: %s", movie)
-				if source[2] == "movie":
-					data_movies.append(("%s %s (%s)" % (movie["release_date"], movie["title"], movie["character"])))
-				else:
-					data_movies.append(("%s %s (%s)" % (movie["first_air_date"], movie["name"], movie["character"])))
-		data_movies.sort(reverse=True)
-		movies = "\n".join(data_movies)
 
-		fulldescription += "\n" + _("Known for:") + "\n" + movies
-		self["fulldescription"].setText(fulldescription)
+			gender = result["gender"]
+			if gender == "1":
+				gender = _("female")
+			elif gender == "2":
+				gender = _("male")
+			elif gender == "divers":
+				gender = _("divers")
+			else:
+				gender = _("None")
+			result["gender"] = gender
+
+			self.parseJsonList(result, "also_known_as", ",")
+			result["popularity"] = "%.1f" % float(result["popularity"])
+
+			data_movies = []
+			for source in [
+				(json_person_movie, ["release_date", "title", "character"], "movie"),
+				(json_person_tv, ["first_air_date", "name", "character"], "tv")]:
+				result2 = {}
+				self.parseJsonSingle(result2, source[0], "cast")
+				logger.debug("result2: %s", result2)
+				for cast in result2["cast"]:
+					logger.debug("cast: %s", cast)
+					movie = {}
+					self.parseJsonMultiple(movie, cast, source[1])
+					logger.debug("movie: %s", movie)
+					if source[2] == "movie":
+						data_movies.append(("%s %s (%s)" % (movie["release_date"], movie["title"], movie["character"])))
+					else:
+						data_movies.append(("%s %s (%s)" % (movie["first_air_date"], movie["name"], movie["character"])))
+			data_movies.sort(reverse=True)
+			movies = "\n".join(data_movies)
+			result["movies"] = movies
+		reactor.callFromThread(callback, result)  # pylint: disable=E1101
 
 	def setup(self):
 		self.session.open(ConfigScreen)
 
 	def exit(self):
-		self.close(True)
+		self.close()

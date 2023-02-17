@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TMDB v2.5.0\n"
-"POT-Creation-Date: 2023-02-08 15:22+0100\n"
-"PO-Revision-Date: 2023-02-08 15:38+0100\n"
+"Project-Id-Version: TMDB v4.4.0\n"
+"POT-Creation-Date: 2023-02-22 14:32+0100\n"
+"PO-Revision-Date: 2023-02-22 14:38+0100\n"
 "Last-Translator: Dario Croci <spaeleus@croci.org>\n"
 "Language-Team: Dario Croci <spaeleus@croci.org>\n"
 "Language: it_IT\n"
@@ -38,14 +38,26 @@ msgstr "Risoluzione cover:"
 msgid "Backdrop resolution:"
 msgstr "Risoluzione sfondi:"
 
-msgid "TMDB: Results for %s"
-msgstr "TMDb: risultati per %s"
+msgid "Use internal TMDB API key:"
+msgstr "Utilizzare API key TMDB interna:"
 
-msgid "Show details"
-msgstr "Mostrare dettagli"
+msgid "Overview"
+msgstr "Panoramica"
 
 msgid "Exit"
 msgstr "Uscire"
+
+msgid "Details"
+msgstr "Dettagli"
+
+msgid "Edit search"
+msgstr "Modificare ricerca"
+
+msgid "more ..."
+msgstr "Altro..."
+
+msgid "Show details"
+msgstr "Mostrare dettagli"
 
 msgid "Details down"
 msgstr "Dettagli giù"
@@ -53,41 +65,20 @@ msgstr "Dettagli giù"
 msgid "Details up"
 msgstr "Dettagli su"
 
-msgid "Edit search"
-msgstr "Modificare ricerca"
+msgid "External TMDB API key is not available in:"
+msgstr "API key TMDB esterna non disponibile in:"
 
-msgid "more ..."
-msgstr "Altro ..."
+msgid "Looking up: %s ..."
+msgstr "Ricerca: %s..."
 
-msgid "Loading..."
-msgstr "Caricamento..."
+msgid "No search string specified."
+msgstr "Stringa di ricerca non specificata"
 
-msgid "Details"
-msgstr "Dettagli"
-
-msgid "TMDB: No results for %s"
-msgstr "TMDb: nessun risultato per %s"
-
-msgid "Try to find %s in tmdb ..."
-msgstr "Ricarca di %s in TMDb..."
-
-msgid "Movie"
-msgstr "Film"
-
-msgid "Series"
-msgstr "Serie"
-
-msgid "Person"
-msgstr "Persona"
-
-msgid "TMDB:"
-msgstr "TMDB:"
-
-msgid "page "
+msgid "page"
 msgstr "Pagina"
 
-msgid "TMDB: Server does not respond."
-msgstr "TMDb: il server non risponde."
+msgid "No results for: %s"
+msgstr "Nessun risultato per: %s"
 
 msgid "TMDB Infos ..."
 msgstr "Info TMDB..."
@@ -113,23 +104,8 @@ msgstr "Film più votati"
 msgid "Search for Movie:"
 msgstr "Ricerca film:"
 
-msgid "Crew"
-msgstr "Team"
-
-msgid "Selection up"
-msgstr "Selezione su"
-
-msgid "Selection down"
-msgstr "Selezione giù"
-
-msgid "Page up"
-msgstr "Pagina su"
-
-msgid "Page down"
-msgstr "Pagina giù"
-
-msgid "Seasons"
-msgstr "Stagioni"
+msgid "Movie Details"
+msgstr "Dettagli film"
 
 msgid "Genre:"
 msgstr "Genere:"
@@ -154,6 +130,39 @@ msgstr "Autore:"
 
 msgid "Studio:"
 msgstr "Studio:"
+
+msgid "Crew"
+msgstr "Team"
+
+msgid "Seasons"
+msgstr "Stagioni"
+
+msgid "Selection up"
+msgstr "Selezione su"
+
+msgid "Selection down"
+msgstr "Selezione giù"
+
+msgid "Page up"
+msgstr "Pagina su"
+
+msgid "Page down"
+msgstr "Pagina giù"
+
+msgid "Videos"
+msgstr "Video"
+
+msgid "min"
+msgstr "min"
+
+msgid "Various"
+msgstr "Varie"
+
+msgid "Episodes"
+msgstr "Episodi"
+
+msgid "Season"
+msgstr "Stagione"
 
 msgid "Save movie description"
 msgstr "Salvare descrizione film"
@@ -194,17 +203,20 @@ msgstr "File EIT rimosso."
 msgid "No EIT file available"
 msgstr "Nessun file EIT disponibile"
 
-msgid "TMDB: No results found, or does not respond."
-msgstr "TMDb: nessun risultato presente/il server non risponde."
+msgid "TMDB videos"
+msgstr "Video TMDB"
 
-msgid "Various"
-msgstr "Varie"
+msgid "Please select a video"
+msgstr "Selezionare un video"
 
-msgid "Episodes"
-msgstr "Episodi"
+msgid "Person Details"
+msgstr "Dettagli persona"
 
-msgid "Season"
-msgstr "Stagione"
+msgid "Popularity"
+msgstr "Popolarità"
+
+msgid "Known for:"
+msgstr "Noto per:"
 
 msgid "female"
 msgstr "Femminile"
@@ -215,8 +227,20 @@ msgstr "Maschile"
 msgid "divers"
 msgstr "Diverso"
 
-msgid "Popularity"
-msgstr "Popolarità"
+msgid "None"
+msgstr "Nessuno"
 
-msgid "Known for:"
-msgstr "Noto per:"
+msgid "Movie"
+msgstr "Film"
+
+msgid "Series"
+msgstr "Serie"
+
+msgid "Person"
+msgstr "Persona"
+
+
+
+
+
+

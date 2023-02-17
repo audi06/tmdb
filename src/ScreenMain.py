@@ -20,6 +20,7 @@
 
 import os
 import base64
+from twisted.internet import threads
 from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -28,6 +29,7 @@ from enigma import eServiceCenter
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 from Screens.HelpMenu import HelpableScreen
 from Screens.ChoiceBox import ChoiceBox
+from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from . import tmdbsimple as tmdb
 from .__init__ import _
@@ -40,48 +42,43 @@ from .Picture import Picture
 from .FileUtils import createDirectory, deleteDirectory, readFile
 from .Debug import logger
 from .SkinUtils import getSkinPath
-from .WebRequests import WebRequests
 from .DelayTimer import DelayTimer
 from .Json import Json
+from .SearchMain import SearchMain
 
 
-class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
+class ScreenMain(SearchMain, Picture, Json, Screen, HelpableScreen):
 	skin = readFile(getSkinPath("ScreenMain.xml"))
 
 	def __init__(self, session, service, mode):
 		Screen.__init__(self, session)
+		SearchMain.__init__(self)
 		Picture.__init__(self)
-		WebRequests.__init__(self)
 		Json.__init__(self)
 		self.session = session
-		tmdb.API_KEY = base64.b64decode("M2I2NzAzYjg3MzRmZWUxYjU5OGRlOWVkN2JiZDNiNDc=")
-		tmdb.REQUESTS_SESSION = self.getSession()
-		tmdb.REQUESTS_TIMEOUT = (3, 5)
-		if not config.plugins.tmdb.api_key.value == "intern":
-			tmdb.API_KEY = config.plugins.tmdb.api_key.value
-			# logger.debug(API Key User: %s", tmdb.API_KEY)
-		self.mode = mode
+
+		self.api_key_file = "/etc/enigma2/tmdb_key.txt"
+		tmdb.API_KEY = self.getApiKey(self.api_key_file)
+
+		self.title = "TMDB - The Movie Database - " + _("Overview")
 		self.menu_selection = 0
-		self.search_title = _("TMDB: Results for %s")
+		self.search_title = ""
 		self.service_title = ""
 		self.page = 1
-		self.ident = 1
+		self.total_pages = 0
+		self.ident = 0
 		self.count = 0
 		self.service_path = ""
 		self.files_saved = False
 
-		if self.mode == 1:
-			self.service_path = service.getPath()
-			if os.path.isdir(self.service_path):
-				self.service_path = os.path.normpath(self.service_path)
-				self.text = os.path.basename(self.service_path)
-			else:
-				info = eServiceCenter.getInstance().info(service)
-				self.text = cleanText(info.getName(service))
-		else:
-			self.text = cleanText(os.path.splitext(service)[0])
-
-		logger.debug("text: %s", self.text)
+		self['searchinfo'] = Label()
+		self['key_red'] = Label(_("Exit"))
+		self['key_green'] = Label(_("Details"))
+		self['key_yellow'] = Label(_("Edit search"))
+		self['key_blue'] = Label(_("more ..."))
+		self['list'] = List()
+		self['cover'] = Pixmap()
+		self['backdrop'] = Pixmap()
 
 		HelpableScreen.__init__(self)
 		self["actions"] = HelpableActionMap(
@@ -102,14 +99,20 @@ class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
 			-1,
 		)
 
-		self['searchinfo'] = Label(_("Loading..."))
-		self['key_red'] = Label(_("Exit"))
-		self['key_green'] = Label(_("Details"))
-		self['key_yellow'] = Label(_("Edit search"))
-		self['key_blue'] = Label(_("more ..."))
-		self['list'] = List()
-		self['cover'] = Pixmap()
-		self['backdrop'] = Pixmap()
+		if mode == 1:
+			self.service_path = service.getPath()
+			if os.path.isdir(self.service_path):
+				self.service_path = os.path.normpath(self.service_path)
+				self.text = os.path.basename(self.service_path)
+			else:
+				info = eServiceCenter.getInstance().info(service)
+				name = info.getName(service)
+				self.text = cleanText(os.path.splitext(name)[0])
+		else:
+			name = service
+			self.text = cleanText(name)
+
+		logger.debug("text: %s", self.text)
 
 		createDirectory(temp_dir)
 		self.onLayoutFinish.append(self.onDialogShow)
@@ -117,102 +120,70 @@ class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
 
 	def onSelectionChanged(self):
 		DelayTimer.stopAll()
-		if self["list"].getCurrent():
-			DelayTimer(200, self.getInfo)
-
-	def onDialogShow(self):
-		logger.debug("text: %s", self.text)
-		if self.text:
-			self.search()
-		else:
-			logger.debug("no movie found")
-			self['searchinfo'].setText(_("TMDB: No results for %s") % self.text)
-
-	def search(self):
-		self['searchinfo'].setText(_("Try to find %s in tmdb ...") % self.text)
-		DelayTimer(50, self.searchTMDB)
-
-	def searchTMDB(self):
-		lang = config.plugins.tmdb.lang.value
-		res = []
-		self.count = 0
-		json_data = {}
-		try:
-			if self.menu_selection == 1:
-				json_data = tmdb.Movies().now_playing(page=self.page, language=lang)
-			elif self.menu_selection == 2:
-				json_data = tmdb.Movies().upcoming(page=self.page, language=lang)
-			elif self.menu_selection == 3:
-				json_data = tmdb.Movies().popular(page=self.page, language=lang)
-			elif self.menu_selection == 4:
-				json_data = tmdb.Movies(self.ident).similar_movies(page=self.page, language=lang)
-			elif self.menu_selection == 5:
-				json_data = tmdb.Movies(self.ident).recommendations(page=self.page, language=lang)
-			elif self.menu_selection == 6:
-				json_data = tmdb.Movies().top_rated(page=self.page, language=lang)
-			else:
-				json_data = tmdb.Search().multi(query=self.text, language=lang)
-			# {u'total_results': 0, u'total_pages': 0, u'page': 1, u'results': []}
-			# logger.debug("json_data: %s", json_data)
-		except Exception as e:
-			logger.error("exception: %s", e)
-			self["searchinfo"].setText(_("Data lookup failed."))
-			return
-
-		result = {}
-		self.parseJsonMultiple(result, json_data, ["total_pages", "results"])
-		self.totalpages = result["total_pages"]
-		for entry in result["results"]:
-			logger.debug("entry: %s", entry)
-			self.count += 1
-
-			keys = ["media_type", "id", "title", "name", "release_date", "first_air_date", "poster_path", "backdrop_path", "profile_path"]
-			self.parseJsonMultiple(result, entry, keys)
-
-			media = result["media_type"]
-			ident = str(result["id"])
-			title_movie = result["title"]
-			title_series = result["name"]
-			title_person = result["name"]
-			date_movie = result["release_date"]
-			date_tv = result["first_air_date"]
-			cover_path = result["poster_path"]
-			profile_path = result["profile_path"]
-			backdrop_path = result["backdrop_path"]
-
-			title = ""
-			if media == "movie":
-				title = "%s (%s, %s)" % (title_movie, _("Movie"), date_movie[:4])
-			elif media == "tv":
-				title = "%s (%s, %s)" % (title_series, _("Series"), date_tv[:4])
-			elif media == "person":
-				title = "%s (%s)" % (title_person, _("Person"))
-			else:
-				media = ""
-
-			if media == "person":
-				cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, profile_path)
-			else:
-				cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
-			backdrop_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.backdrop_size.value, backdrop_path)
-
-			if ident and title and media:
-				res.append(((title, str(ident), media, cover_url, backdrop_url), ))
-		self["list"].setList(res)
-
-		if self.menu_selection >= 1:
-			self['searchinfo'].setText(_("TMDB:") + str(self.search_title) + " (" + _("page ") + str(self.page) + "/" + str(self.totalpages) + ") " + str(self.service_title))
-		else:
-			if res:
-				self['searchinfo'].setText(_("TMDB: Results for %s") % self.text)
-			else:
-				self['searchinfo'].setText(_("TMDB: No results for %s") % self.text)
-
-	def getInfo(self):
 		if config.plugins.tmdb.skip_to_movie.value and self.count == 1:
 			DelayTimer(10, self.ok)
 		else:
-			self.showPictures()
+			DelayTimer(200, self.showPictures)
+
+	def onDialogShow(self):
+		logger.info("...")
+		if not config.plugins.tmdb.internal_api_key.value and not tmdb.API_KEY:
+			msg = _("External TMDB API key is not available in:") + "\n" + self.api_key_file
+			DelayTimer(200, self.session.open, MessageBox, msg, MessageBox.TYPE_INFO)
+		else:
+			self.getData()
+
+	def getData(self):
+		logger.debug("menu_selection: %s, text: %s", self.menu_selection, self.text)
+		if self.menu_selection:
+			self["searchinfo"].setText(self.search_title)
+			threads.deferToThread(self.getResult, self.menu_selection, self.text, self.ident, self.page, self.gotData)
+		else:
+			if self.text:
+				self.search_iteration = 0
+				self.search_words = self.text.split(" ")
+				self.last_text = self.text
+				self["searchinfo"].setText(_("Looking up: %s ...") % self.text)
+				self.search(0, [])
+			else:
+				logger.debug("no search string specified")
+				self["searchinfo"].setText(_("No search string specified."))
+
+	def search(self, totalpages, result):
+		if self.search_iteration and self.search_words:
+			del self.search_words[-1]
+			text = " ".join(self.search_words)
+		else:
+			text = self.text
+		if not result and text:
+			self["searchinfo"].setText(_("Looking up: %s ...") % text)
+			self.search_iteration += 1
+			self.last_text = text
+			logger.debug("iteration: %s, text: %s", self.search_iteration, text)
+			threads.deferToThread(self.getResult, self.menu_selection, text, self.ident, self.page, self.search)
+		else:
+			self.gotData(totalpages, result, self.last_text)
+
+	def gotData(self, totalpages, result, text=""):
+		logger.info("text: %s", text)
+		logger.info("result: %s", result)
+		self.count = len(result)
+		self.totalpages = totalpages
+		if self.menu_selection:
+			if result:
+				self["searchinfo"].setText("%s (%s %s/%s)" % (self.search_title, _("page"), self.page, totalpages))
+			else:
+				self['searchinfo'].setText(_("No results for: %s") % self.search_title)
+		else:
+			if result:
+				if text != self.text:
+					self['searchinfo'].setText("%s (%s)" % (text, self.text))
+				else:
+					self['searchinfo'].setText(self.text)
+			else:
+				self['searchinfo'].setText(_("No results for: %s") % self.text)
+		self["list"].setList(result)
+		self.showPictures()
 
 	def showPictures(self):
 		current = self["list"].getCurrent()
@@ -222,6 +193,9 @@ class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
 			backdrop_url = current[4]
 			self.showPicture(self["cover"], "cover", ident, cover_url)
 			self.showPicture(self["backdrop"], "backdrop", ident, backdrop_url)
+		else:
+			self.showPicture(self["cover"], "cover", "", None)
+			self.showPicture(self["backdrop"], "backdrop", "", None)
 
 	def ok(self):
 		current = self['list'].getCurrent()
@@ -235,7 +209,7 @@ class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
 			if media in ["movie", "tv"]:
 				self.session.openWithCallback(self.callbackScreenMovie, ScreenMovie, title, media, cover_url, ident, self.service_path, backdrop_url)
 			elif media == "person":
-				self.session.open(ScreenPerson, ident, "")
+				self.session.open(ScreenPerson, title, ident, "")
 			else:
 				logger.debug("unsupported media: %s", media)
 
@@ -260,33 +234,29 @@ class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
 
 	def menuCallback(self, ret):
 		logger.info("ret: %s", ret)
-		self.ident = 1
-		self.service_title = " "
-		self.page = 1
-		self.totalpages = 1
 		if ret is not None:
+			self.page = 1
 			self.search_title = ret[0]
 			self.menu_selection = ret[1]
-		if self.menu_selection == 4 or self.menu_selection == 5:
 			current = self['list'].getCurrent()
 			if current:
 				self.service_title = current[0]
 				self.ident = current[1]
-		self.search()
+				self.getData()
 
-	def nextBouquet(self):
-		if self.menu_selection >= 1:
+	def prevBouquet(self):
+		if self.menu_selection:
 			self.page += 1
 			if self.page > self.totalpages:
 				self.page = 1
-			self.search()
+			self.getData()
 
-	def prevBouquet(self):
-		if self.menu_selection >= 1:
+	def nextBouquet(self):
+		if self.menu_selection:
 			self.page -= 1
 			if self.page <= 0:
 				self.page = 1
-			self.search()
+			self.getData()
 
 	def setup(self):
 		self.session.open(ConfigScreen)
@@ -296,9 +266,18 @@ class ScreenMain(Picture, WebRequests, Json, Screen, HelpableScreen):
 		self.session.openWithCallback(self.goSearch, VirtualKeyBoard, title=(_("Search for Movie:")), text=self.text)
 
 	def goSearch(self, text):
-		if text is not None:
+		if text:
 			self.text = text
-		self.search()
+			self.getData()
+
+	def getApiKey(self, api_key_file):
+		api_key = ""
+		if config.plugins.tmdb.internal_api_key.value:
+			api_key = base64.b64decode("M2I2NzAzYjg3MzRmZWUxYjU5OGRlOWVkN2JiZDNiNDc=")
+		elif os.path.isfile(api_key_file):
+			api_key = readFile(api_key_file)[:32]
+		# logger.debug(api_key: %s", api_key)
+		return api_key
 
 	def exit(self):
 		logger.info("files_saved: %s", self.files_saved)

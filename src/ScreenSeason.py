@@ -18,6 +18,7 @@
 # For more information on the GNU General Public License see:
 # <http://www.gnu.org/licenses/>.
 
+from twisted.internet import reactor, threads
 from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
@@ -40,18 +41,19 @@ from .Json import Json
 class ScreenSeason(Picture, Json, Screen, HelpableScreen):
 	skin = readFile(getSkinPath("ScreenSeason.xml"))
 
-	def __init__(self, session, title, ident, media):
-		logger.info("title: %s, ident: %s, media: %s", title, ident, media)
+	def __init__(self, session, movie, ident, media):
+		logger.info("movie: %s, ident: %s, media: %s", movie, ident, media)
 		Screen.__init__(self, session)
+		self.title = "TMDB - The Movie Database - " + _("Seasons")
 		Picture.__init__(self)
 		Json.__init__(self)
 		self.session = session
-		self.title = title
+		self.movie = movie
 		self.ident = ident
 		self.media = media
 
-		self['searchinfo'] = Label(_("Loading..."))
-		self["overview"] = self.overview = ScrollLabel("...")
+		self['searchinfo'] = Label()
+		self["overview"] = self.overview = ScrollLabel()
 		self['key_red'] = Label(_("Exit"))
 		self['key_green'] = Label()
 		self['key_yellow'] = Label()
@@ -89,29 +91,40 @@ class ScreenSeason(Picture, Json, Screen, HelpableScreen):
 			DelayTimer(200, self.getInfo)
 
 	def onFinish(self):
-		logger.debug("Selected: %s", self.title)
-		self['searchinfo'].setText("%s" % self.title)
+		logger.debug("Selected: %s", self.movie)
 		self.showPicture(self["backdrop"], "backdrop", self.ident, None)
-		self.searchTMDB()
+		self.getData()
 
-	def searchTMDB(self):
+	def getData(self):
+		self["searchinfo"].setText(_("Looking up: %s ...") % (self.movie + " - " + _("Seasons")))
+		threads.deferToThread(self.getResult, self.ident, self.gotData)
+
+	def gotData(self, result):
+		if not result:
+			self["searchinfo"].setText(_("No results for: %s") % _("Seasons"))
+		else:
+			self["searchinfo"].setText(self.movie + " - " + _("Seasons"))
+			self["list"].setList(result)
+			self.getInfo()
+
+	def getResult(self, ident, callback):
+		logger.info("ident: %s", ident)
 		lang = config.plugins.tmdb.lang.value
-		self['searchinfo'].setText("%s" % self.title)
 		res = []
 		try:
 			# Seasons
-			json_data_seasons = tmdb.TV(self.ident).info(language=lang)
+			json_data_seasons = tmdb.TV(ident).info(language=lang)
 			result = {}
 			self.parseJsonSingle(result, json_data_seasons, "seasons")
 			for seasons in result["seasons"]:
 				result1a = {}
 				self.parseJsonMultiple(result1a, seasons, ["season_number", "id"])
-				ident = str(result1a["id"])
+				season_ident = result1a["id"]
 				season = result1a["season_number"]
 				logger.debug("Season: %s", season)
 
 				# episodes
-				json_data_episodes = tmdb.TV_Seasons(self.ident, season).info(language=lang)
+				json_data_episodes = tmdb.TV_Seasons(ident, season).info(language=lang)
 				logger.debug("json_data_episodes: %s", json_data_episodes)
 				result2 = {}
 				self.parseJsonMultiple(result2, json_data_episodes, ["name", "air_date", "title", "overview", "poster_path", "episodes"])
@@ -123,12 +136,12 @@ class ScreenSeason(Picture, Json, Screen, HelpableScreen):
 				logger.debug("cover_path: %s", cover_path)
 				cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
 				if ident and title:
-					res.append(((title, cover_url, overview, ident), ))
+					res.append(((title, cover_url, overview, season_ident), ))
 
 				for names in result2["episodes"]:
 					result2a = {}
 					self.parseJsonMultiple(result2a, names, ["id", "name", "title", "episode_number", "overview", "still_path"])
-					ident = str(result2a["id"])
+					episode_ident = result2a["id"]
 					title = result2a["episode_number"]
 					name = result2a["name"]
 					title = "%+6s %s" % (title, name)
@@ -137,13 +150,11 @@ class ScreenSeason(Picture, Json, Screen, HelpableScreen):
 					logger.debug("cover_path: %s", cover_path)
 					cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
 					if ident and title:
-						res.append(((title, cover_url, overview, ident), ))
-			self['list'].setList(res)
-			self.getInfo()
-
+						res.append(((title, cover_url, overview, episode_ident), ))
 		except Exception as e:
 			logger.error("exception: %s", e)
-			self["searchinfo"].setText(_("Data lookup failed."))
+			res = []
+		reactor.callFromThread(callback, res)  # pylint: disable=E1101
 
 	def getInfo(self):
 		self["overview"].setText("...")

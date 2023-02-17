@@ -4,7 +4,7 @@
 	<widget name="list" position="27,120" size="1667,976" itemHeight="54" font="Regular;40" transparent="1" scrollbarMode="showOnDemand"/>
 	<widget name="cover" position="1727,120" size="640,960" alphatest="blend" />
 	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/tmdb/pic/backdrop.jpg" position="0,0" size="2560,1440" zPosition="-6" scale="1" alphatest="blend" />
-	<widget name="backdrop" position="0,0" size="2400,1350" zPosition="-5" alphatest="blend"/>
+	<widget name="backdrop" position="0,0" size="2560,1440" zPosition="-5" alphatest="blend"/>
 	<ePixmap gradient="#50000000,#50000000,horizontal" position="0,0" size="2560,1440" zPosition="-2" />
 	<ePixmap pixmap="Default-FHD/skin_default/buttons/red.svg" position="27,1120" size="400,94" />
 	<ePixmap pixmap="Default-FHD/skin_default/buttons/green.svg" position="427,1120" size="400,94" />

@@ -13,13 +13,14 @@ Created by Celia Oakley on 2013-10-31.
 
 import json
 import requests
+from .WebRequests import WebRequests
 
 
 class APIKeyError(Exception):
     pass
 
 
-class TMDB(object):
+class TMDB(WebRequests, object):
     headers = {'Content-Type': 'application/json',
                'Accept': 'application/json',
                'Connection': 'close'}
@@ -27,6 +28,7 @@ class TMDB(object):
     URLS = {}
 
     def __init__(self):
+        WebRequests.__init__(self)
         from . import API_VERSION, REQUESTS_SESSION, REQUESTS_TIMEOUT
         self.base_uri = 'https://api.themoviedb.org'
         self.base_uri += '/{version}'.format(version=API_VERSION)
@@ -107,7 +109,10 @@ class TMDB(object):
         return response.json()
 
     def _GET(self, path, params=None):
-        return self._request('GET', path, params=params)
+        url = self._get_complete_url(path)
+        params = self._get_params(params)
+        response = self.getContent(url, params)
+        return json.loads(response)
 
     def _POST(self, path, params=None, payload=None):
         return self._request('POST', path, params=params, payload=payload)
@@ -116,9 +121,10 @@ class TMDB(object):
         return self._request('DELETE', path, params=params, payload=payload)
 
     def _set_attrs_to_values(self, response={}):
-        """
-        Set attributes to dictionary values.
+        return
 
+	"""
+        Set attributes to dictionary values.
         - e.g.
         >>> import tmdbsimple as tmdb
         >>> movie = tmdb.Movies(103332)

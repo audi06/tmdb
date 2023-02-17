@@ -19,7 +19,7 @@
 # <http://www.gnu.org/licenses/>.
 
 
-from Components.config import config, ConfigText, ConfigYesNo, ConfigSelection, ConfigSubsection
+from Components.config import config, ConfigYesNo, ConfigSelection, ConfigSubsection
 from .Debug import logger, setLogLevel, log_levels
 
 
@@ -34,6 +34,6 @@ class ConfigInit():
 		config.plugins.tmdb.lang = ConfigSelection(default="de", choices=["de", "en", "fr", "es", "pl", "ru"])
 		config.plugins.tmdb.skip_to_movie = ConfigYesNo(default=True)
 		config.plugins.tmdb.key_yellow = ConfigYesNo(default=True)
-		config.plugins.tmdb.api_key = ConfigText(default='intern')
+		config.plugins.tmdb.internal_api_key = ConfigYesNo(default=True)
 
 		setLogLevel(log_levels[config.plugins.tmdb.debug_log_level.value])
