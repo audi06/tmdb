@@ -111,8 +111,8 @@ class TMDB(WebRequests, object):
     def _GET(self, path, params=None):
         url = self._get_complete_url(path)
         params = self._get_params(params)
-        response = self.getContent(url, params)
-        return json.loads(response)
+        content = self.getContent(url, params)
+        return json.loads(content)
 
     def _POST(self, path, params=None, payload=None):
         return self._request('POST', path, params=params, payload=payload)

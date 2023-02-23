@@ -19,25 +19,23 @@
 # <http://www.gnu.org/licenses/>.
 
 
-from twisted.internet import reactor, threads
+from twisted.internet import threads
 from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
-from Components.config import config
 from Components.ScrollLabel import ScrollLabel
 from Screens.HelpMenu import HelpableScreen
 from Screens.Screen import Screen
-from . import tmdbsimple as tmdb
 from .__init__ import _
 from .Picture import Picture
 from .Debug import logger
 from .FileUtils import readFile
 from .SkinUtils import getSkinPath
 from .ConfigScreen import ConfigScreen
-from .Json import Json
+from .SearchPerson import SearchPerson
 
 
-class ScreenPerson(Picture, Json, Screen, HelpableScreen):
+class ScreenPerson(SearchPerson, Picture, Screen, HelpableScreen):
 	skin = readFile(getSkinPath("ScreenPerson.xml"))
 
 	def __init__(self, session, person, cover_ident, backdrop_ident):
@@ -45,7 +43,7 @@ class ScreenPerson(Picture, Json, Screen, HelpableScreen):
 		Screen.__init__(self, session)
 		Picture.__init__(self)
 		self.title = "TMDB - The Movie Database - " + _("Person Details")
-		Json.__init__(self)
+		SearchPerson.__init__(self)
 		self.session = session
 		self.person = person
 		self.cover_ident = cover_ident
@@ -86,7 +84,7 @@ class ScreenPerson(Picture, Json, Screen, HelpableScreen):
 
 	def getData(self):
 		self["searchinfo"].setText(_("Looking up: %s ...") % self.person)
-		threads.deferToThread(self.getResult, self.gotData)
+		threads.deferToThread(self.getResult, self.cover_ident, self.gotData)
 
 	def gotData(self, result):
 		if not result:
@@ -102,64 +100,6 @@ class ScreenPerson(Picture, Json, Screen, HelpableScreen):
 				+ _("Known for:") + "\n" \
 				+ result["movies"]
 			self["fulldescription"].setText(fulldescription)
-
-	def getResult(self, callback):
-		lang = config.plugins.tmdb.lang.value
-		logger.debug("cover_ident: %s", self.cover_ident)
-		result = {}
-		try:
-			json_person = tmdb.People(self.cover_ident).info(language=lang)
-			self.parseJsonSingle(result, json_person, "biography")
-			if not result["biography"]:
-				json_person = tmdb.People(self.cover_ident).info(language="en")
-				self.parseJsonSingle(result, json_person, "biography")
-			# logger.debug("json_person: %s", json_person)
-			json_person_movie = tmdb.People(self.cover_ident).movie_credits(language=lang)
-			# logger.debug("json_person_movie: %s", json_person_movie)
-			json_person_tv = tmdb.People(self.cover_ident).tv_credits(language=lang)
-			# logger.debug("json_person_tv: %s", json_person_tv)
-		except Exception as e:
-			logger.error("exception: %s", e)
-			result = {}
-		else:
-			keys = ["name", "birthday", "place_of_birth", "gender", "also_known_as", "popularity"]
-			self.parseJsonMultiple(result, json_person, keys)
-			logger.debug("result: %s", result)
-
-			gender = result["gender"]
-			if gender == "1":
-				gender = _("female")
-			elif gender == "2":
-				gender = _("male")
-			elif gender == "divers":
-				gender = _("divers")
-			else:
-				gender = _("None")
-			result["gender"] = gender
-
-			self.parseJsonList(result, "also_known_as", ",")
-			result["popularity"] = "%.1f" % float(result["popularity"])
-
-			data_movies = []
-			for source in [
-				(json_person_movie, ["release_date", "title", "character"], "movie"),
-				(json_person_tv, ["first_air_date", "name", "character"], "tv")]:
-				result2 = {}
-				self.parseJsonSingle(result2, source[0], "cast")
-				logger.debug("result2: %s", result2)
-				for cast in result2["cast"]:
-					logger.debug("cast: %s", cast)
-					movie = {}
-					self.parseJsonMultiple(movie, cast, source[1])
-					logger.debug("movie: %s", movie)
-					if source[2] == "movie":
-						data_movies.append(("%s %s (%s)" % (movie["release_date"], movie["title"], movie["character"])))
-					else:
-						data_movies.append(("%s %s (%s)" % (movie["first_air_date"], movie["name"], movie["character"])))
-			data_movies.sort(reverse=True)
-			movies = "\n".join(data_movies)
-			result["movies"] = movies
-		reactor.callFromThread(callback, result)  # pylint: disable=E1101
 
 	def setup(self):
 		self.session.open(ConfigScreen)

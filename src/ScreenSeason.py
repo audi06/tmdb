@@ -18,15 +18,13 @@
 # For more information on the GNU General Public License see:
 # <http://www.gnu.org/licenses/>.
 
-from twisted.internet import reactor, threads
+from twisted.internet import threads
 from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
-from Components.config import config
 from Components.ScrollLabel import ScrollLabel
 from Screens.HelpMenu import HelpableScreen
 from Screens.Screen import Screen
-from . import tmdbsimple as tmdb
 from .__init__ import _
 from .List import List
 from .ConfigScreen import ConfigScreen
@@ -35,10 +33,10 @@ from .FileUtils import readFile
 from .SkinUtils import getSkinPath
 from .Debug import logger
 from .DelayTimer import DelayTimer
-from .Json import Json
+from .SearchSeason import SearchSeason
 
 
-class ScreenSeason(Picture, Json, Screen, HelpableScreen):
+class ScreenSeason(SearchSeason, Picture, Screen, HelpableScreen):
 	skin = readFile(getSkinPath("ScreenSeason.xml"))
 
 	def __init__(self, session, movie, ident, media):
@@ -46,7 +44,7 @@ class ScreenSeason(Picture, Json, Screen, HelpableScreen):
 		Screen.__init__(self, session)
 		self.title = "TMDB - The Movie Database - " + _("Seasons")
 		Picture.__init__(self)
-		Json.__init__(self)
+		SearchSeason.__init__(self)
 		self.session = session
 		self.movie = movie
 		self.ident = ident
@@ -106,55 +104,6 @@ class ScreenSeason(Picture, Json, Screen, HelpableScreen):
 			self["searchinfo"].setText(self.movie + " - " + _("Seasons"))
 			self["list"].setList(result)
 			self.getInfo()
-
-	def getResult(self, ident, callback):
-		logger.info("ident: %s", ident)
-		lang = config.plugins.tmdb.lang.value
-		res = []
-		try:
-			# Seasons
-			json_data_seasons = tmdb.TV(ident).info(language=lang)
-			result = {}
-			self.parseJsonSingle(result, json_data_seasons, "seasons")
-			for seasons in result["seasons"]:
-				result1a = {}
-				self.parseJsonMultiple(result1a, seasons, ["season_number", "id"])
-				season_ident = result1a["id"]
-				season = result1a["season_number"]
-				logger.debug("Season: %s", season)
-
-				# episodes
-				json_data_episodes = tmdb.TV_Seasons(ident, season).info(language=lang)
-				logger.debug("json_data_episodes: %s", json_data_episodes)
-				result2 = {}
-				self.parseJsonMultiple(result2, json_data_episodes, ["name", "air_date", "title", "overview", "poster_path", "episodes"])
-				air_date = "(%s)" % result2["air_date"][:4]
-				title = result2["name"]
-				title = "%s %s" % (title, air_date)
-				overview = result2["overview"]
-				cover_path = result2["poster_path"]
-				logger.debug("cover_path: %s", cover_path)
-				cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
-				if ident and title:
-					res.append(((title, cover_url, overview, season_ident), ))
-
-				for names in result2["episodes"]:
-					result2a = {}
-					self.parseJsonMultiple(result2a, names, ["id", "name", "title", "episode_number", "overview", "still_path"])
-					episode_ident = result2a["id"]
-					title = result2a["episode_number"]
-					name = result2a["name"]
-					title = "%+6s %s" % (title, name)
-					overview = result2a["overview"]
-					cover_path = result2a["still_path"]
-					logger.debug("cover_path: %s", cover_path)
-					cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
-					if ident and title:
-						res.append(((title, cover_url, overview, episode_ident), ))
-		except Exception as e:
-			logger.error("exception: %s", e)
-			res = []
-		reactor.callFromThread(callback, res)  # pylint: disable=E1101
 
 	def getInfo(self):
 		self["overview"].setText("...")

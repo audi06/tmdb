@@ -18,14 +18,12 @@
 # For more information on the GNU General Public License see:
 # <http://www.gnu.org/licenses/>.
 
-from twisted.internet import reactor, threads
+from twisted.internet import threads
 from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
 from Components.Pixmap import Pixmap
-from Components.config import config
 from Screens.HelpMenu import HelpableScreen
 from Screens.Screen import Screen
-from . import tmdbsimple as tmdb
 from .__init__ import _
 from .List import List
 from .ConfigScreen import ConfigScreen
@@ -35,10 +33,10 @@ from .Debug import logger
 from .SkinUtils import getSkinPath
 from .FileUtils import readFile
 from .DelayTimer import DelayTimer
-from .Json import Json
+from .SearchPeople import SearchPeople
 
 
-class ScreenPeople(Picture, Screen, Json, HelpableScreen):
+class ScreenPeople(SearchPeople, Picture, Screen, HelpableScreen):
 	skin = readFile(getSkinPath("ScreenPeople.xml"))
 
 	def __init__(self, session, movie, ident, media, cover_url, backdrop_url):
@@ -46,7 +44,7 @@ class ScreenPeople(Picture, Screen, Json, HelpableScreen):
 		Screen.__init__(self, session)
 		Picture.__init__(self)
 		self.title = "TMDB - The Movie Database - " + _("Crew")
-		Json.__init__(self)
+		SearchPeople.__init__(self)
 		self.session = session
 		self.movie = movie
 		self.ident = ident
@@ -96,7 +94,7 @@ class ScreenPeople(Picture, Screen, Json, HelpableScreen):
 
 	def getData(self):
 		self["searchinfo"].setText(_("Looking up: %s ...") % (self.movie + " - " + _("Crew")))
-		threads.deferToThread(self.getResult, self.ident, self.gotData)
+		threads.deferToThread(self.getResult, self.ident, self.media, self.gotData)
 
 	def gotData(self, result):
 		if not result:
@@ -105,73 +103,6 @@ class ScreenPeople(Picture, Screen, Json, HelpableScreen):
 			self["searchinfo"].setText(self.movie + " - " + _("Crew"))
 			self["list"].setList(result)
 			self.getInfo()
-
-	def getResult(self, ident, callback):
-		logger.info("ident: %s", ident)
-		lang = config.plugins.tmdb.lang.value
-		res = []
-		try:
-			if self.media == "movie":
-				json_data_cast = tmdb.Movies(ident).credits(language=lang)
-				logger.debug("json_data_cast: %s", json_data_cast)
-			else:
-				json_data_cast = tmdb.TV(ident).credits(language=lang)
-				logger.debug("json_data_cast: %s", json_data_cast)
-				json_data_seasons = tmdb.TV(ident).info(language=lang)
-				logger.debug("json_data_seasons: %s", json_data_seasons)
-		except Exception as e:
-			logger.error("exception: %s", e)
-			res = []
-		else:
-			result1 = {}
-			self.parseJsonSingle(result1, json_data_cast, "cast")
-			for casts in result1["cast"]:
-				result2 = {}
-				keys = ["id", "name", "profile_path", "character"]
-				self.parseJsonMultiple(result2, casts, keys)
-				cover_ident = result2["id"]
-				name = result2["name"]
-				title = "%s (%s)" % (result2["name"], result2["character"])
-				cover_path = result2["profile_path"]
-				cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
-				if cover_ident and title:
-					res.append(((title, name, cover_url, cover_ident), ))
-
-			if not self.media == "movie":
-				season_number = 1
-				result = {}
-				self.parseJsonSingle(result, json_data_seasons, "seasons")
-				for season in result["seasons"]:
-					# logger.debug("######: %s", season)
-					result2 = {}
-					keys2 = ["season_number", "id", "name", "air_date"]
-					self.parseJsonMultiple(result2, season, keys2)
-					season_number = result2["season_number"]
-					# logger.debug("#########: %s", result2["season_number"])
-					cover_ident = result2["id"]
-					name = result2["name"]
-					date = result2["air_date"][:4]
-					title = "%s (%s)" % (name, date)
-					res.append(((title, name, None, ""), ))
-
-					json_data_season = tmdb.TV_Seasons(ident, season_number).credits(language=lang)
-					result3 = {}
-					self.parseJsonSingle(result3, json_data_season, "cast")
-					for casts in result3["cast"]:
-						result4 = {}
-						keys4 = ["id", "name", "character", "profile_path"]
-						self.parseJsonMultiple(result4, casts, keys4)
-						cover_ident = result4["id"]
-						name = result4["name"]
-						character = result4["character"]
-						title = "    %s (%s)" % (name, character)
-						cover_path = result4["profile_path"]
-						cover_url = "http://image.tmdb.org/t/p/%s/%s" % (config.plugins.tmdb.cover_size.value, cover_path)
-
-						if cover_ident and title:
-							res.append(((title, name, cover_url, cover_ident), ))
-		logger.debug("res: %s", res)
-		reactor.callFromThread(callback, res)  # pylint: disable=E1101
 
 	def getInfo(self):
 		current = self["list"].getCurrent()
