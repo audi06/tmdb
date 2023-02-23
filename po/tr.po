@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tmdb\n"
 "POT-Creation-Date: 2023-02-23 22:06+0300\n"
-"PO-Revision-Date: 2023-02-23 22:15+0300\n"
+"PO-Revision-Date: 2023-02-24 02:15+0300\n"
 "Last-Translator: audi06_19 <info@dreamosat-forum.com>\n"
 "Language-Team: \n"
 "Language: tr\n"
@@ -160,7 +160,7 @@ msgstr "Oylar:"
 
 #: ScreenMovie.py:95
 msgid "Runtime:"
-msgstr "Çalışma Zamanı:"
+msgstr "Süre:"
 
 #: ScreenMovie.py:96
 msgid "Year:"
