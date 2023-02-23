@@ -31,7 +31,7 @@ class ConfigInit():
 		config.plugins.tmdb.debug_log_level = ConfigSelection(default="DEBUG", choices=list(log_levels.keys()))
 		config.plugins.tmdb.cover_size = ConfigSelection(default="original", choices=["w92", "w185", "w500", "original"])
 		config.plugins.tmdb.backdrop_size = ConfigSelection(default="original", choices=["w300", "w780", "w1280", "original"])
-		config.plugins.tmdb.lang = ConfigSelection(default="de", choices=["de", "en", "fr", "es", "pl", "ru"])
+		config.plugins.tmdb.lang = ConfigSelection(default="de", choices=["de", "en", "fr", "es", "pl", "ru", "tr"])
 		config.plugins.tmdb.skip_to_movie = ConfigYesNo(default=True)
 		config.plugins.tmdb.key_yellow = ConfigYesNo(default=True)
 		config.plugins.tmdb.internal_api_key = ConfigYesNo(default=True)

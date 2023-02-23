@@ -24,6 +24,7 @@ The installation script will also install a feed source that enables a convenien
 - german
 - italian (by Spaeleus)
 - russian (by ay4488)
+- turkish (by audi06_19)
 
 ## Links
 - Support thread: https://dreambox.de/board/index.php?thread/26606-tmdb-plugin/&pageNo=1

@@ -1,0 +1,408 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tmdb\n"
+"POT-Creation-Date: 2023-02-23 22:06+0300\n"
+"PO-Revision-Date: 2023-02-23 22:15+0300\n"
+"Last-Translator: audi06_19 <info@dreamosat-forum.com>\n"
+"Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ../src\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: ConfigScreen.py:24 ScreenMain.py:96 ScreenMovie.py:129 ScreenPeople.py:77
+#: ScreenPerson.py:73 ScreenSeason.py:78
+msgid "Setup"
+msgstr "Kurulum"
+
+#: ConfigScreen.py:41
+msgid "OK"
+msgstr "OK"
+
+#: ConfigScreen.py:42
+msgid "Cancel"
+msgstr "İptal"
+
+#: ConfigScreen.py:53
+msgid "Language:"
+msgstr "Dil:"
+
+#: ConfigScreen.py:54
+msgid "Skip to movie details for single result:"
+msgstr "Tek bir sonuç için film ayrıntılarına geç:"
+
+#: ConfigScreen.py:55
+msgid "Yellow key for TMDB infos in EPGs:"
+msgstr "EPG'lerde TMDB bilgileri için sarı tuş:"
+
+#: ConfigScreen.py:56
+msgid "Cover resolution:"
+msgstr "Kapak çözünürlüğü:"
+
+#: ConfigScreen.py:57
+msgid "Backdrop resolution:"
+msgstr "Arka plan çözünürlüğü:"
+
+#: ConfigScreen.py:58
+msgid "Use internal TMDB API key:"
+msgstr "Dahili TMDB API anahtarını kullan:"
+
+#: ScreenMain.py:63
+msgid "Overview"
+msgstr "Genel Bakış"
+
+#: ScreenMain.py:75 ScreenMain.py:89 ScreenMain.py:92 ScreenMovie.py:103
+#: ScreenMovie.py:120 ScreenMovie.py:125 ScreenPeople.py:56 ScreenPeople.py:70
+#: ScreenPeople.py:75 ScreenPerson.py:57 ScreenPerson.py:67 ScreenPerson.py:72
+#: ScreenSeason.py:55 ScreenSeason.py:70 ScreenSeason.py:77
+msgid "Exit"
+msgstr "Çıkış"
+
+#: ScreenMain.py:76 ScreenPeople.py:57
+msgid "Details"
+msgstr "Detaylar"
+
+#: ScreenMain.py:77 ScreenMain.py:94 ScreenMain.py:97
+msgid "Edit search"
+msgstr "Aramayı düzenle"
+
+#: ScreenMain.py:78 ScreenMain.py:95 ScreenMovie.py:106 ScreenMovie.py:128
+#: ScreenMovie.py:130
+msgid "more ..."
+msgstr "daha fazla ..."
+
+#: ScreenMain.py:88 ScreenMain.py:93 ScreenPeople.py:69 ScreenPeople.py:76
+#: ScreenSeason.py:69
+msgid "Show details"
+msgstr "Ayrıntıları göster"
+
+#: ScreenMain.py:90 ScreenSeason.py:73
+msgid "Details down"
+msgstr "Ayrıntılar aşağı"
+
+#: ScreenMain.py:91 ScreenSeason.py:74
+msgid "Details up"
+msgstr "Ayrıntılar yukarı"
+
+#: ScreenMain.py:131
+msgid "External TMDB API key is not available in:"
+msgstr "Harici TMDB API anahtarı şurada mevcut değil:"
+
+#: ScreenMain.py:146 ScreenMain.py:159 ScreenMovie.py:144 ScreenPeople.py:96
+#: ScreenPerson.py:86 ScreenSeason.py:97
+#, python-format
+msgid "Looking up: %s ..."
+msgstr "Yukarı bakılıyor: %s ..."
+
+#: ScreenMain.py:150
+msgid "No search string specified."
+msgstr "Arama dizisi belirtilmedi."
+
+#: ScreenMain.py:174
+msgid "page"
+msgstr "sayfa"
+
+#: ScreenMain.py:176 ScreenMain.py:184 ScreenMovie.py:149 ScreenPeople.py:101
+#: ScreenPerson.py:91 ScreenSeason.py:102
+#, python-format
+msgid "No results for: %s"
+msgstr "Şunun için sonuç yok: %s"
+
+#: ScreenMain.py:225 TMDBEpgSelection.py:48 plugin.py:72 plugin.py:80
+msgid "TMDB Infos ..."
+msgstr "TMDB Bilgileri ..."
+
+#: ScreenMain.py:226
+msgid "Current movies in cinemas"
+msgstr "Sinemalardaki güncel filmler"
+
+#: ScreenMain.py:227
+msgid "Upcoming movies"
+msgstr "Yaklaşan filmler"
+
+#: ScreenMain.py:228
+msgid "Popular movies"
+msgstr "Popüler filmler"
+
+#: ScreenMain.py:229
+msgid "Similar movies"
+msgstr "Benzer filmler"
+
+#: ScreenMain.py:230
+msgid "Recommendations"
+msgstr "Öneriler"
+
+#: ScreenMain.py:231
+msgid "Best rated movies"
+msgstr "En çok oy alan filmler"
+
+#: ScreenMain.py:266
+msgid "Search for Movie:"
+msgstr "Film Ara:"
+
+#: ScreenMovie.py:58
+msgid "Movie Details"
+msgstr "Film Ayrıntıları"
+
+#: ScreenMovie.py:90
+msgid "Genre:"
+msgstr "Tür:"
+
+#: ScreenMovie.py:93
+msgid "Votes:"
+msgstr "Oylar:"
+
+#: ScreenMovie.py:95
+msgid "Runtime:"
+msgstr "Çalışma Zamanı:"
+
+#: ScreenMovie.py:96
+msgid "Year:"
+msgstr "Yıl:"
+
+#: ScreenMovie.py:97
+msgid "Countries:"
+msgstr "Ülkeler:"
+
+#: ScreenMovie.py:98
+msgid "Director:"
+msgstr "Yönetmen:"
+
+#: ScreenMovie.py:99
+msgid "Author:"
+msgstr "Yazar:"
+
+#: ScreenMovie.py:100
+msgid "Studio:"
+msgstr "Stüdyo:"
+
+#: ScreenMovie.py:104 ScreenMovie.py:119 ScreenMovie.py:126 ScreenPeople.py:46
+#: ScreenPeople.py:96 ScreenPeople.py:101 ScreenPeople.py:103
+msgid "Crew"
+msgstr "Ekip"
+
+#: ScreenMovie.py:105 ScreenMovie.py:127 ScreenSeason.py:45 ScreenSeason.py:97
+#: ScreenSeason.py:102 ScreenSeason.py:104 SearchMovie.py:181
+msgid "Seasons"
+msgstr "Mevsimler"
+
+#: ScreenMovie.py:121 ScreenPeople.py:71 ScreenPerson.py:68 ScreenSeason.py:71
+msgid "Selection up"
+msgstr "Seçim yukarı"
+
+#: ScreenMovie.py:122 ScreenPeople.py:72 ScreenPerson.py:69 ScreenSeason.py:72
+msgid "Selection down"
+msgstr "Seçim aşağı"
+
+#: ScreenMovie.py:123 ScreenPerson.py:70
+msgid "Page up"
+msgstr "Sayfa yukarı"
+
+#: ScreenMovie.py:124 ScreenPeople.py:73 ScreenPeople.py:74 ScreenPerson.py:71
+#: ScreenSeason.py:75 ScreenSeason.py:76
+msgid "Page down"
+msgstr "Sayfa aşağı"
+
+#: ScreenMovie.py:181
+msgid "Videos"
+msgstr "Videolar"
+
+#: ScreenMovie.py:186
+msgid "Save movie description"
+msgstr "Film açıklamasını kaydet"
+
+#: ScreenMovie.py:187
+msgid "Delete movie EIT file"
+msgstr "Film EIT dosyasını sil"
+
+#: ScreenMovie.py:188
+msgid "Save movie cover"
+msgstr "Film kapağını kaydet"
+
+#: ScreenMovie.py:189
+msgid "Save movie backdrop"
+msgstr "Film arka planını kaydet"
+
+#: ScreenMovie.py:202
+msgid "File operation results:"
+msgstr "Dosya işlemi sonuçları:"
+
+#: ScreenMovie.py:209
+msgid "Cover saved."
+msgstr "Kapak kaydedildi."
+
+#: ScreenMovie.py:213
+msgid "No cover available"
+msgstr "Kapak yok"
+
+#: ScreenMovie.py:219
+msgid "Backdrop saved."
+msgstr "Arka plan kaydedildi."
+
+#: ScreenMovie.py:223
+msgid "No backdrop available"
+msgstr "Arka plan yok"
+
+#: ScreenMovie.py:230
+msgid "Movie description saved."
+msgstr "Film açıklaması kaydedildi."
+
+#: ScreenMovie.py:233
+msgid "No movie description available"
+msgstr "Film açıklaması yok"
+
+#: ScreenMovie.py:240
+msgid "EIT file deleted."
+msgstr "EIT dosyası silindi."
+
+#: ScreenMovie.py:242
+msgid "No EIT file available"
+msgstr "EIT dosyası yok"
+
+#: ScreenMovie.py:268
+msgid "TMDB videos"
+msgstr "TMDB videoları"
+
+#: ScreenMovie.py:269
+msgid "Please select a video"
+msgstr "Lütfen bir video seçin"
+
+#: ScreenPerson.py:45
+msgid "Person Details"
+msgstr "Kişi Ayrıntıları"
+
+#: ScreenPerson.py:98
+msgid "Popularity"
+msgstr "Popülerlik"
+
+#: ScreenPerson.py:100
+msgid "Known for:"
+msgstr "Tanınır:"
+
+#: SearchMain.py:83 SearchMain.py:90
+msgid "Movie"
+msgstr "Film"
+
+#: SearchMain.py:85
+msgid "Series"
+msgstr "Diziler"
+
+#: SearchMain.py:87
+msgid "Person"
+msgstr "Kişi"
+
+#: SearchMovie.py:89
+msgid "min"
+msgstr "dk"
+
+#: SearchMovie.py:167
+msgid "Various"
+msgstr "Çeşitli"
+
+#: SearchMovie.py:181 SearchMovie.py:189
+msgid "Episodes"
+msgstr "Bölümler"
+
+#: SearchMovie.py:189
+msgid "Season"
+msgstr "Sezon"
+
+#: SearchPerson.py:59
+msgid "female"
+msgstr "kadın"
+
+#: SearchPerson.py:61
+msgid "male"
+msgstr "erkek"
+
+#: SearchPerson.py:63
+msgid "divers"
+msgstr ""
+
+#: SearchPerson.py:65
+msgid "None"
+msgstr "Yok"
+
+#~ msgid "Plugin"
+#~ msgstr "Eklenti"
+
+#~ msgid "Version"
+#~ msgstr "Sürüm"
+
+#~ msgid "Copyright"
+#~ msgstr "Telif hakkı"
+
+#~ msgid "License"
+#~ msgstr "Lisans"
+
+#~ msgid "End"
+#~ msgstr "Son"
+
+#~ msgid "Stop playback"
+#~ msgstr "Oynatmayı durdur"
+
+#~ msgid "Skip forward"
+#~ msgstr "Ileri atla"
+
+#~ msgid "Skip backward"
+#~ msgstr "Geri atla"
+
+#~ msgid "EPG Info"
+#~ msgstr "EPG Bilgisi"
+
+#~ msgid "Do you want to resume playback at position: %d:%02d:%02d?"
+#~ msgstr "Oynatmayı şu konumda sürdürmek istiyor musunuz: %d:%02d:%02d?"
+
+#~ msgid "Save"
+#~ msgstr "Kaydet"
+
+#~ msgid "Defaults"
+#~ msgstr "Varsayılanlar"
+
+#~ msgid "Really close without saving settings?"
+#~ msgstr "Ayarlarınızı kaydetmeden çıkmak istediğinizden emin misiniz?"
+
+#~ msgid "Loading default settings will overwrite all settings, really load them?"
+#~ msgstr "Varsayılan ayarlar yüklendiğinde tüm ayarların üzerine yazılacak, gerçekten yüklenecekler mi?"
+
+#~ msgid "Some changes require a GUI restart"
+#~ msgstr "Bazı değişiklikler GUI'nin yeniden başlatılmasını gerektirir"
+
+#~ msgid "Restart GUI now?"
+#~ msgstr "GUI'yi yeniden başlatmak istiyor musunuz?"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Yer imleri"
+
+#~ msgid "Select directory"
+#~ msgstr "Dizin seç"
+
+#~ msgid "Path does not exist"
+#~ msgstr "Yol mevcut değil"
+
+#~ msgid "Close"
+#~ msgstr "Kapat"
+
+#~ msgid "Hide"
+#~ msgstr "Gizle"
+
+#~ msgid "Cancelling, please wait"
+#~ msgstr "İptal ediliyor, lütfen bekleyin"
+
+#~ msgid "Processing"
+#~ msgstr "İşleniyor"
+
+#~ msgid "Done"
+#~ msgstr "Bitti"
+
+#~ msgid "Cancelled"
+#~ msgstr "İptal edildi"
+
+#~ msgid "Please wait"
+#~ msgstr "Lütfen bekle"
